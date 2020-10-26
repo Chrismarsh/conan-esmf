@@ -22,7 +22,8 @@ class ESMFConan(ConanFile):
         git.clone("https://github.com/esmf-org/esmf.git")
 
 
-    def build(self):
+    def _get_envars(self):
+
         esmf_envars = {}
 
         # gcc 10 requires a special set of compiler flags.                                    
@@ -51,13 +52,20 @@ class ESMFConan(ConanFile):
         if is_gfortran_10:
             esmf_envars["ESMF_F90COMPILEOPTS"] = "-fallow-argument-mismatch -fallow-invalid-boz"
 
+        return esmf_envars
+
+    def build(self):
+
+        esmf_envars = self._get_envars()
+
         env_build = AutoToolsBuildEnvironment(self)
         env_build.make(vars=esmf_envars)
 
 
-
     def package(self):
+        esmf_envars = self._get_envars()
+
         env_build = AutoToolsBuildEnvironment(self)
-        env_build.install()
+        env_build.install(vars=esmf_envars)
         
         self.copy('*.cmake','cmake','cmake')
