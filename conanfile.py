@@ -1,5 +1,6 @@
 from conans import ConanFile, AutoToolsBuildEnvironment, tools, RunEnvironment
 from conans.errors import ConanInvalidConfiguration
+from conans.model.version import Version
 import os
 from six import StringIO
 import re
@@ -27,7 +28,7 @@ class ESMFConan(ConanFile):
         # gcc 10 requires a special set of compiler flags.                                    
         is_gfortran_10 = False
 
-        if self.settings.compiler == 'gcc' and self.settings.compiler['gcc'].version >= 10:
+        if self.settings.compiler == 'gcc' and Version(self.settings.compiler.version.value) >= "10.0":
             is_gfortran_10 = True
         
         # if we use macos with default apple-clang but use a gcc10 gfortran from homebrew, conan doesn't know about this
