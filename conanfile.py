@@ -1,6 +1,8 @@
 from conans import ConanFile, AutoToolsBuildEnvironment, tools, RunEnvironment
 from conans.errors import ConanInvalidConfiguration
 import os
+from six import StringIO
+import re
 
 class ESMFConan(ConanFile):
     name = "esmf"
@@ -10,33 +12,51 @@ class ESMFConan(ConanFile):
     url = "https://esmf-org.github.io/"
     description = "Earth System Modeling Framework "
     settings = "os", "compiler", "build_type", "arch"
-    # options = {"shared": [True, False]}
-    # default_options = "shared=True"
     generators = "cmake"
+
+    
 
     def source(self):
         git = tools.Git(folder="")
         git.clone("https://github.com/esmf-org/esmf.git")
 
-        # self.run("git clone --depth=1 https://github.com/esmf-org/esmf.git")
 
     def build(self):
+        esmf_envars = {}
+
+        # gcc 10 requires a special set of compiler flags.                                    
+        is_gfortran_10 = False
+
+        if self.settings.compiler == 'gcc' and self.settings.compiler['gcc'].version >= 10:
+            is_gfortran_10 = True
+        
+        # if we use macos with default apple-clang but use a gcc10 gfortran from homebrew, conan doesn't know about this
+        # so manually grab the $PATH gfortran version 
+        if tools.os_info.is_macos and not is_gfortran_10:
+            mybuf = StringIO()                                   
+            self.run('gfortran --version',mybuf)
+
+            ver = mybuf.getvalue()
+            ver = re.findall("([0-9]+)\.[0-9]+\.[0-9]+",ver)
+            if len(ver) ==0:
+                self.output.error('Gfortran not found')
+            if int(ver[0]) >= 10:
+                is_gfortran_10 = True
+
+        esmf_envars["ESMF_INSTALL_PREFIX"] =self.package_folder
+        esmf_envars["ESMF_DIR"] = self.build_folder
+        esmf_envars["ESMF_COMM"] = "mpiuni"
+
+        if is_gfortran_10:
+            esmf_envars["ESMF_F90COMPILEOPTS"] = "-fallow-argument-mismatch -fallow-invalid-boz"
+
         env_build = AutoToolsBuildEnvironment(self)
-        env_build.vars
-        with tools.environment_append({"ESMF_F90COMPILEOPTS": "-fallow-argument-mismatch -fallow-invalid-boz",
-                                           "ESMF_INSTALL_PREFIX":self.package_folder,
-                                           "ESMF_DIR": self.build_folder,
-                                           "ESMF_COMM":"mpiuni"}):
-            self.run('make -j10', run_environment=True)
+        env_build.make(vars=esmf_envars)
+
 
 
     def package(self):
         env_build = AutoToolsBuildEnvironment(self)
-        env_build.vars
-        with tools.environment_append({"ESMF_F90COMPILEOPTS": "-fallow-argument-mismatch -fallow-invalid-boz",
-                                           "ESMF_INSTALL_PREFIX":self.package_folder,
-                                           "ESMF_DIR": self.build_folder,
-                                           "ESMF_COMM":"mpiuni"}):
-            self.run('make -j10 install', run_environment=True)
+        env_build.install()
         
         self.copy('*.cmake','cmake','cmake')
