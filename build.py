@@ -13,10 +13,10 @@ if __name__ == "__main__":
                                 build_types=["Release"],
                                 docker_entry_script = command)
                               
-    builder.add_common_builds(pure_c=False)
+    builder.add_common_builds(pure_c=False, shared_option_name=False)
 
     builder.remove_build_if(lambda build: build.settings["compiler.libcxx"] == "libstdc++")
-    builder.remove_build_if(lambda build: build.settings["shared"] == "static")
+
 
     named_builds = defaultdict(list)
     for settings, options, env_vars, build_requires, reference in builder.items:
