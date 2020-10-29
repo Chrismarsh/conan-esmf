@@ -7,7 +7,7 @@ import re
 
 class ESMFConan(ConanFile):
     name = "esmf"
-    version = "8.1.0"
+    # version = "8.1.0"
     license = "MIT"
     author = ""
     url = "https://esmf-org.github.io/"
@@ -19,8 +19,9 @@ class ESMFConan(ConanFile):
 
     def source(self):
         git = tools.Git(folder="")
-        git.clone("https://github.com/esmf-org/esmf.git")
+        git.clone("https://github.com/esmf-org/esmf.git", branch='ESMF_'+self.version.replace('.','_'), shallow=True)
 
+        # tools.get(**self.conan_data["sources"][self.version],destination=".")
 
     def _get_envars(self):
 
