@@ -1,6 +1,5 @@
 env:
    global:
-      - CONAN_REFERENCE: "esmf/8.1.0"
       - CONAN_USERNAME: "CHM"
       - CONAN_LOGIN_USERNAME: "chrismarsh"
       - CONAN_CHANNEL: "stable"
