@@ -24,9 +24,13 @@ matrix:
       - <<: *linux
         env: CONAN_GCC_VERSIONS=7 CONAN_DOCKER_IMAGE=conanio/gcc72 CONAN_CURRENT_PAGE="gcc" CONAN_REFERENCE="esmf/8.1.0_beta_snapshot_36"
       - <<: *linux
+        env: CONAN_GCC_VERSIONS=5 CONAN_DOCKER_IMAGE=conanio/gcc54 CONAN_CURRENT_PAGE="gcc" CONAN_REFERENCE="esmf/8.1.0_beta_snapshot_36"
+      - <<: *linux
         env: CONAN_GCC_VERSIONS=8 CONAN_DOCKER_IMAGE=conanio/gcc8 CONAN_CURRENT_PAGE="gcc" CONAN_REFERENCE="esmf/8.0.1"
       - <<: *linux
         env: CONAN_GCC_VERSIONS=7 CONAN_DOCKER_IMAGE=conanio/gcc72 CONAN_CURRENT_PAGE="gcc" CONAN_REFERENCE="esmf/8.0.1"
+      - <<: *linux
+        env: CONAN_GCC_VERSIONS=5 CONAN_DOCKER_IMAGE=conanio/gcc54 CONAN_CURRENT_PAGE="gcc" CONAN_REFERENCE="esmf/8.0.1"
       - <<: *osx
         osx_image: xcode11.2
         env: CONAN_APPLE_CLANG_VERSIONS=11.0 CONAN_CURRENT_PAGE="apple-clang" CONAN_REFERENCE="esmf/8.1.0_beta_snapshot_36"

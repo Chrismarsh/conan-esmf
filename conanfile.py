@@ -21,6 +21,9 @@ class ESMFConan(ConanFile):
         git = tools.Git(folder="")
         git.clone("https://github.com/esmf-org/esmf.git", branch='ESMF_'+self.version.replace('.','_'), shallow=True)
 
+        tools.replace_in_file(file_path='src/Infrastructure/Mesh/src/Moab/moab/Util.hpp',
+                               search="define moab_isfinite(f) (!isinf(f) && !isnan(f))",
+                               replace="define moab_isfinite(f) (!std::isinf(f) && !std::isnan(f))")
         # tools.get(**self.conan_data["sources"][self.version],destination=".")
 
     def _get_envars(self):
