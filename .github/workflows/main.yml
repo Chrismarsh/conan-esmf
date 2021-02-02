@@ -59,6 +59,10 @@ jobs:
       - name: Alias gfortran
         if: ${{ matrix.cfg.os  == 'macos-latest' }}
         run: |
+            shopt -s expand_aliases
+            gfortran-8 --version
+            gfortran-9 --version
+            gfortran-10 --version
             alias gfortran='gfortran-10'
             gfortran --version
           
