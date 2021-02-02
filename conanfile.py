@@ -1,7 +1,7 @@
 from conans import ConanFile, AutoToolsBuildEnvironment, tools, RunEnvironment
 from conans.errors import ConanInvalidConfiguration
 from conans.model.version import Version
-import os
+import os, glob
 from six import StringIO
 import re
 
@@ -14,16 +14,27 @@ class ESMFConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake"
 
+    _source_folder = 'esmf'
     
+    _autotools = None
 
     def source(self):
-        git = tools.Git(folder="")
-        git.clone("https://github.com/esmf-org/esmf.git", branch='ESMF_'+self.version.replace('.','_'), shallow=True)
+        # git = tools.Git(folder="")
+        # git.clone("https://github.com/esmf-org/esmf.git", branch='ESMF_'+self.version.replace('.','_'), shallow=True)
+        tools.get(**self.conan_data["sources"][self.version])
 
-        tools.replace_in_file(file_path='src/Infrastructure/Mesh/src/Moab/moab/Util.hpp',
+        for f in glob.glob("esmf-*"):
+            os.rename(f, self._source_folder)
+
+        tools.replace_in_file(file_path=self._source_folder+'/src/Infrastructure/Mesh/src/Moab/moab/Util.hpp',
                                search="define moab_isfinite(f) (!isinf(f) && !isnan(f))",
                                replace="define moab_isfinite(f) (!std::isinf(f) && !std::isnan(f))")
-        # tools.get(**self.conan_data["sources"][self.version],destination=".")
+        
+
+    def _configure_autotools(self):
+        if not self._autotools:
+            self._autotools = AutoToolsBuildEnvironment(self)
+        return self._autotools
 
     def _get_envars(self):
 
@@ -49,7 +60,7 @@ class ESMFConan(ConanFile):
                 is_gfortran_10 = True
 
         esmf_envars["ESMF_INSTALL_PREFIX"] =self.package_folder
-        esmf_envars["ESMF_DIR"] = self.build_folder
+        esmf_envars["ESMF_DIR"] = os.path.join(self.build_folder,self._source_folder)
         esmf_envars["ESMF_COMM"] = "mpiuni"
 
         if is_gfortran_10:
@@ -61,14 +72,16 @@ class ESMFConan(ConanFile):
 
         esmf_envars = self._get_envars()
 
-        env_build = AutoToolsBuildEnvironment(self)
-        env_build.make(vars=esmf_envars)
+        with tools.chdir(self._source_folder):
+            env_build = self._configure_autotools()
+            env_build.make(vars=esmf_envars)
 
 
     def package(self):
         esmf_envars = self._get_envars()
 
-        env_build = AutoToolsBuildEnvironment(self)
-        env_build.install(vars=esmf_envars)
+        with tools.chdir(self._source_folder):
+            env_build = self._configure_autotools()
+            env_build.install(vars=esmf_envars)
         
         self.copy('*.cmake','cmake','cmake')
