@@ -1,5 +1,5 @@
 sources:
-  "8.1.0_beta_snapshot_36":
+  "8.1.0.36-beta":
     url: "https://github.com/esmf-org/esmf/archive/ESMF_8_1_0_beta_snapshot_36.tar.gz"
   "8.0.1":
     url: "https://github.com/esmf-org/esmf/archive/ESMF_8_0_1.tar.gz"

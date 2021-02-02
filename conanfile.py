@@ -7,7 +7,6 @@ import re
 
 class ESMFConan(ConanFile):
     name = "esmf"
-    # version = "8.1.0"
     license = "MIT"
     author = ""
     url = "https://esmf-org.github.io/"
