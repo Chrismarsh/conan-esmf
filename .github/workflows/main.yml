@@ -55,10 +55,12 @@ jobs:
         run: |
           pip install conan --upgrade
           pip install conan_package_tools
-          
-          if [ "$RUNNER_OS" == "macOS" ]; then
+
+      - name: Alias gfortran
+        if: ${{ matrix.cfg.os  == 'macos-latest' }}
+        run: |
             alias gfortran='gfortran-10'
-          fi
+            gfortran --version
           
       - name: env linux
         if: ${{ matrix.cfg.os  == 'ubuntu-latest' }}
