@@ -79,7 +79,7 @@ jobs:
         run: |
           python build.py
         env:
-          CONAN_CURRENT_PAGE: ${{matrix.cfg.compiler}}_shared
+          CONAN_CURRENT_PAGE: ${{matrix.cfg.compiler}}
           CONAN_REFERENCE: esmf/${{ matrix.lib-version}}
 
 
