@@ -56,8 +56,8 @@ jobs:
           pip install conan --upgrade
           pip install conan_package_tools
           
-          if [ "$RUNNER_OS" == "Linux" ]; then
-            sudo apt-get install libcurl4-openssl-dev
+          if [ "$RUNNER_OS" == "macOS" ]; then
+            alias gfortran='gfortran-10'
           fi
           
       - name: env linux
@@ -73,8 +73,7 @@ jobs:
         uses: allenevans/set-env@v2.0.0
         with:
           CONAN_APPLE_CLANG_VERSIONS: ${{ matrix.cfg.version }}
-          CONAN_BUILD_POLICY: "gdal,missing"
-
+ 
       - name: Build
         run: |
           python build.py
