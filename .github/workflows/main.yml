@@ -82,6 +82,7 @@ jobs:
  
       - name: Build
         run: |
+          shopt -s expand_aliases
           python build.py
         env:
           CONAN_CURRENT_PAGE: ${{matrix.cfg.compiler}}
