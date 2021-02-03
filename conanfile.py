@@ -1,6 +1,7 @@
 from conans import ConanFile, AutoToolsBuildEnvironment, tools, RunEnvironment
 from conans.errors import ConanInvalidConfiguration
 from conans.model.version import Version
+from conans.tools.os_info import os_info
 import os, glob
 from six import StringIO
 import re
@@ -29,6 +30,17 @@ class ESMFConan(ConanFile):
         tools.replace_in_file(file_path=self._source_folder+'/src/Infrastructure/Mesh/src/Moab/moab/Util.hpp',
                                search="define moab_isfinite(f) (!isinf(f) && !isnan(f))",
                                replace="define moab_isfinite(f) (!std::isinf(f) && !std::isnan(f))")
+
+        try:
+            # on macos under the github workflow env, gfortran is not symlinked and rather gfortran-<version> needs to be called
+            # so patch the gfortran build rules to account for this name
+            if os.environ["CI"] and os_info.is_macos:
+                gfortran = os.environ["GFORTRAN_NAME"]
+                tools.replace_in_file(file_path=self._source_folder+'/build_config/Darwin.gfortran.default/build_rules.mk',
+                    search= "ESMF_F90DEFAULT         = gfortran",
+                    replace=f"ESMF_F90DEFAULT         = {gfortran}")
+        except KeyValue as e:
+            pass # we aren't running in a CI environemnt
         
 
     def _configure_autotools(self):

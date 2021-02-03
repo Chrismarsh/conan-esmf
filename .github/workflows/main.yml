@@ -55,16 +55,6 @@ jobs:
         run: |
           pip install conan --upgrade
           pip install conan_package_tools
-
-      - name: Alias gfortran
-        if: ${{ matrix.cfg.os  == 'macos-latest' }}
-        run: |
-            shopt -s expand_aliases
-            gfortran-8 --version
-            gfortran-9 --version
-            gfortran-10 --version
-            alias gfortran='gfortran-10'
-            gfortran --version
           
       - name: env linux
         if: ${{ matrix.cfg.os  == 'ubuntu-latest' }}
@@ -79,6 +69,7 @@ jobs:
         uses: allenevans/set-env@v2.0.0
         with:
           CONAN_APPLE_CLANG_VERSIONS: ${{ matrix.cfg.version }}
+          GFORTRAN_NAME: gfortran-10 # set the name to use for gfortran as we need to use gfotran-<version>
  
       - name: Build
         run: |
