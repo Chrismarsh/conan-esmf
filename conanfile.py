@@ -64,8 +64,11 @@ class ESMFConan(ConanFile):
             mybuf = StringIO()
 
             gfortran = "gfortran"
-            if os.environ["CI"]:
-                gfortran = os.environ["GFORTRAN_NAME"]
+            try:
+                if os.environ["CI"]:
+                    gfortran = os.environ["GFORTRAN_NAME"]
+            except KeyError as e:
+                pass #not in CI
 
             self.run(f'{gfortran} --version',mybuf)
 

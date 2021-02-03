@@ -1,4 +1,6 @@
 sources:
+  "8.1.0.43-beta":
+    url: "https://github.com/esmf-org/esmf/archive/ESMF_8_1_0_beta_snapshot_43.tar.gz"
   "8.1.0.36-beta":
     url: "https://github.com/esmf-org/esmf/archive/ESMF_8_1_0_beta_snapshot_36.tar.gz"
   "8.0.1":
