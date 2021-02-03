@@ -61,8 +61,13 @@ class ESMFConan(ConanFile):
         # if we use macos with default apple-clang but use a gcc10 gfortran from homebrew, conan doesn't know about this
         # so manually grab the $PATH gfortran version 
         if tools.os_info.is_macos and not is_gfortran_10:
-            mybuf = StringIO()                                   
-            self.run('gfortran --version',mybuf)
+            mybuf = StringIO()
+
+            gfortran = "gfortran"
+            if os.environ["CI"]:
+                gfortran = os.environ["GFORTRAN_NAME"]
+
+            self.run(f'{gfortran} --version',mybuf)
 
             ver = mybuf.getvalue()
             ver = re.findall("([0-9]+)\.[0-9]+\.[0-9]+",ver)
