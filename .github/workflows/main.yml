@@ -80,7 +80,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo env ACCEPT_EULA=Y apt-get upgrade -y
-          sudo apt-get install gfortran
 
       - name: env linux
         if: startsWith( matrix.cfg.os, 'ubuntu' )
@@ -88,6 +87,8 @@ jobs:
         with:
           CONAN_GCC_VERSIONS: ${{ matrix.cfg.version }}
           CC: gcc-${{ matrix.cfg.version }}
+          FC: gfortran-${{ matrix.cfg.version }}
+          GFORTRAN_NAME: gfortran-${{ matrix.cfg.version }}
           CXX: g++-${{ matrix.cfg.version }}
 
       - name: env macos

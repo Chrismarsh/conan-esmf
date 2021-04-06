@@ -34,7 +34,7 @@ class ESMFConan(ConanFile):
         try:
             # on macos under the github workflow env, gfortran is not symlinked and rather gfortran-<version> needs to be called
             # so patch the gfortran build rules to account for this name
-            if os.environ["CI"] and os_info.is_macos:
+            if os.environ["CI"]: # and os_info.is_macos:
                 gfortran = os.environ["GFORTRAN_NAME"]
                 tools.replace_in_file(file_path=self._source_folder+'/build_config/Darwin.gfortran.default/build_rules.mk',
                     search= "ESMF_F90DEFAULT         = gfortran",
