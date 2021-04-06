@@ -87,7 +87,6 @@ jobs:
         with:
           CONAN_GCC_VERSIONS: ${{ matrix.cfg.version }}
           CC: gcc-${{ matrix.cfg.version }}
-          ESMF_COMPILER: gfortran-${{ matrix.cfg.version }}
           GFORTRAN_NAME: gfortran-${{ matrix.cfg.version }}
           CXX: g++-${{ matrix.cfg.version }}
 
