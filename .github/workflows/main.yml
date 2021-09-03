@@ -16,8 +16,8 @@ on:
 env:
   CONAN_USERNAME: CHM
   CONAN_CHANNEL: stable
-  CONAN_UPLOAD: "https://api.bintray.com/conan/chrismarsh/CHM"
-  CONAN_LOGIN_USERNAME: "chrismarsh"
+  CONAN_UPLOAD: "http://conan.snowcast.ca/artifactory/api/conan/chm"
+  CONAN_LOGIN_USERNAME: "github"
   CONAN_PASSWORD: ${{ secrets.CONAN_PASSWORD }}
   CONAN_STABLE_BRANCH_PATTERN: "stable/*"
   CONAN_UPLOAD_ONLY_WHEN_STABLE: "1"
@@ -44,7 +44,7 @@ jobs:
           - {os: "ubuntu-20.04", compiler: "gcc", version: 9}
           - {os: "ubuntu-20.04", compiler: "gcc", version: 10}
           - {os: "macos-10.15", compiler: "apple-clang", version: "12.0"}
-        lib-version: ["8.0.1","8.1.0.36-beta","8.1.0.43-beta"]
+        lib-version: ["8.0.1", "8.1.1"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
