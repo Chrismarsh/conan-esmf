@@ -16,7 +16,7 @@ on:
 env:
   CONAN_USERNAME: CHM
   CONAN_CHANNEL: stable
-  CONAN_UPLOAD: "http://conan.snowcast.ca/artifactory/api/conan/chm"
+  CONAN_UPLOAD: "http://conan.snowcast.ca:8081/artifactory/api/conan/chm"
   CONAN_LOGIN_USERNAME: "github"
   CONAN_PASSWORD: ${{ secrets.CONAN_PASSWORD }}
   CONAN_STABLE_BRANCH_PATTERN: "stable/*"
