@@ -83,8 +83,8 @@ class ESMFConan(ConanFile):
         esmf_envars["ESMF_DIR"] = os.path.join(self.build_folder,self._source_folder)
         esmf_envars["ESMF_COMM"] = "mpiuni"
 
-        if is_gfortran_10:
-            esmf_envars["ESMF_F90COMPILEOPTS"] = "-fallow-argument-mismatch -fallow-invalid-boz"
+        # if is_gfortran_10:
+            # esmf_envars["ESMF_F90COMPILEOPTS"] = "-fallow-argument-mismatch -fallow-invalid-boz"
 
         return esmf_envars
 
